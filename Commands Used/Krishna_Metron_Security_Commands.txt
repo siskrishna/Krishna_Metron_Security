@@ -1,0 +1,94 @@
+# Krishna Metron Security - Important Commands Reference
+# ----------------------------------------------------
+# This file contains all important terminal commands used in the project setup, execution, and GitHub configuration.
+
+------------------------------------------------------------
+# 🧩 Virtual Environment Setup
+------------------------------------------------------------
+python3 -m venv venv
+# → Creates a virtual environment named 'venv' for project isolation.
+
+source venv/bin/activate
+# → Activates the virtual environment (for macOS/Linux).
+
+------------------------------------------------------------
+# 📦 Installing Dependencies
+------------------------------------------------------------
+pip install -r requirements.txt
+# → Installs all required Python packages from requirements.txt.
+
+------------------------------------------------------------
+# 🧪 Running Tests
+------------------------------------------------------------
+export PYTHONPATH=$(pwd)
+# → Sets the Python path to the current directory so pytest can find modules.
+
+pytest -q
+# → Runs all test cases quietly and shows concise output.
+
+------------------------------------------------------------
+# 🔐 Slack Integration
+------------------------------------------------------------
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/XXXXXXXX/XXXXXX/XXXXXXXX"
+# → Sets the Slack webhook URL temporarily for sending notifications.
+
+# To make it permanent:
+nano ~/.zshrc
+# → Opens zsh configuration file in editor.
+# Add this line at the end:
+# export SLACK_WEBHOOK_URL='https://hooks.slack.com/services/...'
+source ~/.zshrc
+# → Reloads zsh so the variable becomes available in all future sessions.
+
+------------------------------------------------------------
+# 🧰 Docker Commands
+------------------------------------------------------------
+docker build -t krishna_metron_security .
+# → Builds a Docker image named 'krishna_metron_security' using the Dockerfile in current directory.
+
+docker run -it krishna_metron_security
+# → Runs the container interactively.
+
+------------------------------------------------------------
+# 🪣 Git & GitHub Setup
+------------------------------------------------------------
+git init
+# → Initializes a local Git repository.
+
+git add .
+# → Stages all files for commit.
+
+git commit -m "Initial commit: secure password manager project"
+# → Commits the staged files with a message.
+
+git remote add origin https://github.com/siskrishna/Krishna_Metron_Security.git
+# → Connects the local repo to the GitHub repository.
+
+git push -u origin main
+# → Pushes your local main branch to GitHub.
+
+------------------------------------------------------------
+# 🧼 Removing Secret File from Git History
+------------------------------------------------------------
+git branch backup-main
+# → Creates a backup branch before rewriting history.
+
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch Steps.txt" --prune-empty --tag-name-filter cat -- --all
+# → Removes the 'Steps.txt' file (which contained secrets) from the entire git history.
+
+rm -rf .git/refs/original/
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+# → Cleans up old references and permanently deletes the sensitive data.
+
+------------------------------------------------------------
+# 🗜️ Creating a ZIP File of the Project
+------------------------------------------------------------
+zip -r Krishna_Metron_Security.zip /Users/siskrishna/Krishna_Metron\ Security
+# → Creates a zip archive of the entire project folder for upload or sharing.
+
+------------------------------------------------------------
+# ✅ Slack Webhook Test Command
+------------------------------------------------------------
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Test message from terminal"}' "$SLACK_WEBHOOK_URL"
+# → Sends a test message to your configured Slack channel to verify webhook integration.
